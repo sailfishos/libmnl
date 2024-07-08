@@ -7,9 +7,8 @@ Source0:       %{name}-%{version}.tar.bz2
 
 URL:           https://github.com/sailfishos/libmnl/
 
-BuildRequires: gcc
-BuildRequires: gnupg2
-BuildRequires: make
+Requires(post): /sbin/ldconfig
+Requires(postun): /sbin/ldconfig
 
 %description
 libmnl is a minimalistic user-space library oriented to Netlink developers.
@@ -35,7 +34,7 @@ The %{name}-static package contains static libraries for developing
 applications that use %{name}.
 
 %prep
-%setup -q -n %{name}-%{version}/upstream
+%autosetup -p1 -n %{name}-%{version}/upstream
 
 %build
 %autogen
@@ -45,6 +44,10 @@ applications that use %{name}.
 %install
 %make_install
 find $RPM_BUILD_ROOT -name '*.la' -delete
+
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
 
 %files
 %license COPYING
